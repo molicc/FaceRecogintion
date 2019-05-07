@@ -76,10 +76,11 @@ public class RecoginteImpl implements Recognit {
             // 参考：http://blog.csdn.net/nicebooks/article/details/8175002
             double c1 = cvCompareHist(Histogram1, Histogram2, CV_COMP_CORREL) * 100;
             double c2 = cvCompareHist(Histogram1, Histogram2, CV_COMP_INTERSECT);
-            if ((c1 + c2) / 2 > 80) {
+            double matchingRate = (c1 + c2) / 2;
+            if (matchingRate>contextPropertiesUtil.getMatching()) {
                 return new ExcutionResultUtil(true, "匹配度高");
             } else {
-                return new ExcutionResultUtil(false, "匹配度低,请重新登录");
+                return new ExcutionResultUtil(false, "匹配度低,请重新登录，匹配度为："+matchingRate);
             }
         } catch (Exception e) {
             return new ExcutionResultUtil(false, "比较失败" + e.getMessage());

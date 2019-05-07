@@ -12,10 +12,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Autor Administrator
  * @Date 2019/5/3 21:43
  **/
-@ConfigurationProperties(prefix = "save")
+@ConfigurationProperties(prefix = "properties")
 public class ContextPropertiesUtil {
     private String imagePath;
     private String facesPath;
+    private double matching;
 
     public String getImagePath() {
         return imagePath;
@@ -31,5 +32,13 @@ public class ContextPropertiesUtil {
 
     public void setFacesPath(String facesPath) {
         this.facesPath = facesPath;
+    }
+
+    public double getMatching() {
+        return matching;
+    }
+
+    public void setMatching(double matching) {
+        this.matching = matching;
     }
 }
