@@ -47,35 +47,40 @@ public class PretreatImpl implements Pretreat {
      * @return
      */
     private ExcutionResultUtil detectFaceByPath(String path) {
-        //todo 提高人脸检测精度
 
         //以8位单通道灰度的形式读入指定图片
         Mat image = imread(path, 0);
         //对图片做均衡化处理
         equalizeHist(image, image);
+        RectVector facestemp = new RectVector();
 
         //创建分类器
-        /*CascadeClassifier cascadeClassifier = new CascadeClassifier(System.getProperty("user.dir")+
-                "\\src\\main\\resources\\classifiler\\haarcascade_frontalface_alt2.xml");*/
-        CascadeClassifier cascadeClassifier = new CascadeClassifier(System.getProperty("user.dir") +
+        CascadeClassifier faceClassifier = new CascadeClassifier(System.getProperty("user.dir") +
                 "\\src\\main\\resources\\classifiler\\lbpcascade_frontalface.xml");
+        CascadeClassifier eyeClassifier = new CascadeClassifier(System.getProperty("user.dir")+
+                "\\src\\main\\resources\\classifiler\\haarcascade_eye_tree_eyeglasses.xml");
         //从照片中检测人脸区域
-        cascadeClassifier.detectMultiScale(image, faces, 1.1, 2, IMREAD_GRAYSCALE, new Size(30, 30), new Size(0,
+        faceClassifier.detectMultiScale(image, facestemp, 1.1, 3, IMREAD_GRAYSCALE, new Size(30, 30), new Size(0,
                 0));
+
+        //遍历检测出来的人脸
+        for (int i = 0; i < facestemp.size(); i++) {
+            //截取当前人脸
+            Mat face = image.apply(facestemp.get(i));
+            RectVector eye =new RectVector();
+            eyeClassifier.detectMultiScale(face,eye,1.1, 1, IMREAD_GRAYSCALE, new Size(3, 3),new Size(0,0));
+            if (eye.size()==2){
+                faces.put(facestemp.get(i));
+            }
+        }
+
         if (faces.size() <= 0) {
             return new ExcutionResultUtil(false, "没有检测到人脸，请重新拍摄");
         } else if (faces.size() > 1) {
             return new ExcutionResultUtil(false, "检测到多个人脸，请重新拍摄");
         }
         return new ExcutionResultUtil(true, "检测人脸成功");
-       /* //遍历检测出来的人脸
-        for (int i = 0; i < faces.size(); i++) {
-            Rect face = faces.get(i);
-            //截取当前人脸
-            Mat face = image.apply(new Rect(rect.x(), rect.y(), rect.width(), rect.height()));
-        }
-        //将人脸图片保存到指定目录
-        imwrite("C:\\Users\\Administrator\\Desktop\\OpenCV_Images\\source\\out.jpg", image);*/
+
     }
 
     /**
