@@ -1,4 +1,4 @@
-package com.dx.FaceRecogintion.controller;/**
+package com.dx.facerecognition.controller;/**
  * Created by Administrator on 2019/5/2.
  *
  * @author Administrator

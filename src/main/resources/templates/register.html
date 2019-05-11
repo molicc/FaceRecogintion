@@ -13,24 +13,34 @@
     <div class="row">
         <h2 class="text-center">人脸注册</h2>
         <div class="input-group">
-            <span class="input-group-addon" id="basic-addon2">用户名:</span>
+            <span class="input-group-addon">用户名:</span>
             <input type="text" class="form-control" placeholder="请输入用户名" aria-describedby="basic-addon2" id="username">
         </div>
 
         <h4 class="text-center">请保持微笑</h4>
         <div class="col-md-6 text-center">
-            <video id="video" width="300" height="200"
-                   style="border:1px solid #7027ff;border-radius: 50px;" autoplay></video>
-        </div>
-        <div class="col-md-6 text-center">
-            <canvas width="300" height="200" style="border:1px solid #7027ff;border-radius: 50px;"
-                    id="canvas"></canvas>
+            <video id="video" style="border:1px solid #7027ff;border-radius: 50px;" autoplay></video>
         </div>
 
+        <div class="col-md-6 text-center">
+            <canvas style="border:1px solid #7027ff;border-radius: 50px;" id="canvas"></canvas>
+        </div>
+
+
+        <div class="input-group col-md-12 text-center">
+            <span class="input-group-addon">安全问题:</span>
+            <input type="text" class="form-control" placeholder="请输入安全问题" aria-describedby="basic-addon2" id="question">
+        </div>
+        <br/>
+        <div class="input-group col-md-12 text-center">
+            <span class="input-group-addon">问题答案:</span>
+            <input type="text" class="form-control" placeholder="请输入问题答案" aria-describedby="basic-addon2" id="answer">
+        </div>
 
         <div class="col-md-12 text-center">
             <button type="button" class="btn btn-primary btn-lg" style="margin: 20px" id="login"
-                    onclick="CatchCode()">注册</button>
+                    onclick="CatchCode()">注册
+            </button>
             <button type="button" class="btn btn-default btn-lg" style="margin: 20px" id="register"
                     onclick="location='login'">登录
             </button>

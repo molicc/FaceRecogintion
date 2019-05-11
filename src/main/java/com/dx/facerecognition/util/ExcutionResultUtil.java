@@ -1,4 +1,4 @@
-package com.dx.FaceRecogintion.util;/**
+package com.dx.facerecognition.util;/**
  * Created by Administrator on 2019/5/3.
  *
  * @author Administrator

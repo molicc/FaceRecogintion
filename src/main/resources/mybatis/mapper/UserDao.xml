@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dx.facerecognition.dao.UserDao">
+
+    <resultMap id="userMap" type="com.dx.facerecognition.entity.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="question" property="question" jdbcType="VARCHAR"/>
+        <result column="answer" property="answer" jdbcType="VARCHAR"/>
+        <result column="imagepath" property="imagePath" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertNewUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.dx.facerecognition.entity.User">
+        insert into user(username,imagepath,question,answer)
+        value (#{username},#{imagePath},#{question},#{answer})
+    </insert>
+
+    <select id="getUserByName" parameterType="string" resultType="com.dx.facerecognition.entity.User">
+        select id,username,imagepath,question,answer from user
+        where username = #{username}
+    </select>
+
+    <update id="updateUserInfo" parameterType="com.dx.facerecognition.entity.User">
+        update user
+        <set>
+            <if test="username!=null">username =#{username},</if>
+            <if test="imagePath!=null">imagepath =#{imagePath},</if>
+            <if test="question!=null">question =#{question},</if>
+            <if test="answer!=null">password =#{answer}</if>
+        </set>
+        where username = #{username}
+    </update>
+
+</mapper>

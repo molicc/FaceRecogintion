@@ -1,10 +1,10 @@
-package com.dx.FaceRecogintion.service;/**
+package com.dx.facerecognition.service;/**
  * Created by Administrator on 2019/5/3.
  *
  * @author Administrator
  */
 
-import com.dx.FaceRecogintion.util.ExcutionResultUtil;
+import com.dx.facerecognition.util.ExcutionResultUtil;
 
 /**
  * @ClassName Pretreat

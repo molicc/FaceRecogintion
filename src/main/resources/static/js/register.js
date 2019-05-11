@@ -13,19 +13,31 @@ function CatchCode() {
     var imgData1 = imgData.substring(22);
 
     var username = $("#username").val();
-    $.ajax({
-        type: "post",
-        url: "/registerReq",
-        data: {"img": imgData1, "username": username},
-        success: function (data) {
-            if (data.success) {
-                alert(data.msg);
-                window.location.href = "login";
-            }else {
-                alert(data.msg);
+    var question = $("#question").val();
+    var answer = $("#answer").val();
+
+    if (username.replace("\s+g", '') == '') {
+        alert("请输入用户名！");
+    } else if (question.replace("\s+g", '') == '') {
+        alert("请输入安全问题!");
+    } else if (answer.replace("\s+g", '') == '') {
+        alert("请输入问题答案!");
+    } else {
+        $.ajax({
+            type: "post",
+            url: "/registerReq",
+            data: {"img": imgData1, "username": username, "question": question, "answer": answer},
+            success: function (data) {
+                if (data.success) {
+                    alert(data.msg);
+                    window.location.href = "login";
+                } else {
+                    alert(data.msg);
+                }
+            }, error: function (data) {
+                alert("注册失败，请稍后重试！");
             }
-        }, error: function (data) {
-            alert("注册失败，请稍后重试！");
-        }
-    });
+        });
+    }
+
 }

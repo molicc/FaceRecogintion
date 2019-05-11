@@ -1,21 +1,19 @@
-package com.dx.FaceRecogintion.service.impl;/**
+package com.dx.facerecognition.service.impl;/**
  * Created by Administrator on 2019/5/5.
  *
  * @author Administrator
  */
 
-import com.dx.FaceRecogintion.service.Pretreat;
-import com.dx.FaceRecogintion.service.Recognit;
-import com.dx.FaceRecogintion.util.ContextPropertiesUtil;
-import com.dx.FaceRecogintion.util.ExcutionResultUtil;
-import com.dx.FaceRecogintion.util.PathUtil;
+import com.dx.facerecognition.service.Pretreat;
+import com.dx.facerecognition.service.Recognit;
+import com.dx.facerecognition.util.ContextPropertiesUtil;
+import com.dx.facerecognition.util.ExcutionResultUtil;
+import com.dx.facerecognition.util.PathUtil;
 import org.bytedeco.opencv.opencv_core.CvHistogram;
 import org.bytedeco.opencv.opencv_core.IplImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
 
 import static org.bytedeco.opencv.global.opencv_core.CV_HIST_ARRAY;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
@@ -37,13 +35,10 @@ public class RecoginteImpl implements Recognit {
     ContextPropertiesUtil contextPropertiesUtil;
 
     @Override
-    public ExcutionResultUtil compare(String img, String username) {
-        //判断用户是否存在
-        if (!new File(contextPropertiesUtil.getFacesPath() + username).exists()) {
-            return new ExcutionResultUtil(false, "用户名不存在，请先注册");
-        }
+    public ExcutionResultUtil compare(String img, String imagePath) {
+
         //对图片进行预处理
-        ExcutionResultUtil pretreatImg = pretreat.pretreatImg(img, username + "compare");
+        ExcutionResultUtil pretreatImg = pretreat.pretreatImg(img, "temp");
         if (!pretreatImg.isSuccess()) {
             //预处理失败则返回
             return new ExcutionResultUtil(false, pretreatImg.getMsg());
@@ -51,8 +46,8 @@ public class RecoginteImpl implements Recognit {
         //成功则进行比较
         try {
             //CV_LOAD_IMAGE_GRAYSCALE = 0 ,将指定图像处理为灰度图
-            IplImage image1 = cvLoadImage(contextPropertiesUtil.getFacesPath() + username + "\\face.jpg", 0);
-            IplImage image2 = cvLoadImage(contextPropertiesUtil.getFacesPath() + username + "compare\\face.jpg", 0);
+            IplImage image1 = cvLoadImage(imagePath, 0);
+            IplImage image2 = cvLoadImage(contextPropertiesUtil.getFacesPath() + "temp\\face.jpg", 0);
             if (null == image1 || null == image2) {
                 return new ExcutionResultUtil(false, "比较对象为空");
             }
@@ -77,17 +72,17 @@ public class RecoginteImpl implements Recognit {
             double c1 = cvCompareHist(Histogram1, Histogram2, CV_COMP_CORREL) * 100;
             double c2 = cvCompareHist(Histogram1, Histogram2, CV_COMP_INTERSECT);
             double matchingRate = (c1 + c2) / 2;
-            if (matchingRate>contextPropertiesUtil.getMatching()) {
+            if (matchingRate > contextPropertiesUtil.getMatching()) {
                 return new ExcutionResultUtil(true, "匹配度高");
             } else {
-                return new ExcutionResultUtil(false, "匹配度低,请重新登录，匹配度为："+matchingRate);
+                return new ExcutionResultUtil(false, "匹配度低,请重新登录，匹配度为：" + matchingRate);
             }
         } catch (Exception e) {
             return new ExcutionResultUtil(false, "比较失败" + e.getMessage());
         } finally {
             //将比对图片删除
-            PathUtil.deleteDirPath(contextPropertiesUtil.getImagePath() + username + "compare");
-            PathUtil.deleteDirPath(contextPropertiesUtil.getFacesPath() + username + "compare");
+            PathUtil.deleteDirPath(contextPropertiesUtil.getImagePath() + "temp");
+            PathUtil.deleteDirPath(contextPropertiesUtil.getFacesPath() + "temp");
         }
     }
 

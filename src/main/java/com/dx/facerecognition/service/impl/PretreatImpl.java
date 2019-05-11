@@ -1,13 +1,13 @@
-package com.dx.FaceRecogintion.service.impl;/**
+package com.dx.facerecognition.service.impl;/**
  * Created by Administrator on 2019/5/3.
  *
  * @author Administrator
  */
 
-import com.dx.FaceRecogintion.service.Pretreat;
-import com.dx.FaceRecogintion.util.ContextPropertiesUtil;
-import com.dx.FaceRecogintion.util.ExcutionResultUtil;
-import com.dx.FaceRecogintion.util.PathUtil;
+import com.dx.facerecognition.service.Pretreat;
+import com.dx.facerecognition.util.ContextPropertiesUtil;
+import com.dx.facerecognition.util.ExcutionResultUtil;
+import com.dx.facerecognition.util.PathUtil;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
 import org.bytedeco.opencv.opencv_core.RectVector;
@@ -93,6 +93,7 @@ public class PretreatImpl implements Pretreat {
     private ExcutionResultUtil cutFace(String imagePath, String username) {
         //人脸存储路径
         String dirPath = contextProperties.getFacesPath() + username;
+        String facePath = dirPath+"\\face.jpg";
         //生成指定目录
         ExcutionResultUtil makeDirPath = PathUtil.makeDirPath(dirPath);
         if (!makeDirPath.isSuccess()) {
@@ -113,8 +114,8 @@ public class PretreatImpl implements Pretreat {
             //规格化
             resize(face, mat, size);
             //保存到指定路径
-            imwrite(dirPath + "\\face.jpg", mat);
-            return new ExcutionResultUtil(true, "截取人脸成功");
+            imwrite(facePath, mat);
+            return new ExcutionResultUtil(true, facePath);
         } catch (Exception e) {
             return new ExcutionResultUtil(false, "截取人脸失败:" + e.getMessage());
         }
