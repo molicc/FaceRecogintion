@@ -12,20 +12,20 @@ package com.dx.facerecognition.entity;/**
  **/
 public class User {
     private int id;
-    private String imagePath;
+    private int imageSize;
     private String username;
     private String question;
     private String answer;
 
 
-    public User(String username, String imagePath, String question, String answer) {
-        this.imagePath = imagePath;
+    public User(String username, int imageSize, String question, String answer) {
+        this.imageSize = imageSize;
         this.username = username;
         this.question = question;
         this.answer = answer;
     }
 
-    public User(){
+    public User() {
 
     }
 
@@ -37,12 +37,12 @@ public class User {
         this.id = id;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public int getImageSize() {
+        return imageSize;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImageSize(int imageSize) {
+        this.imageSize = imageSize;
     }
 
     public String getUsername() {
@@ -73,7 +73,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", imagePath='" + imagePath + '\'' +
+                ", imageSize='" + imageSize + '\'' +
                 ", username='" + username + '\'' +
                 ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +

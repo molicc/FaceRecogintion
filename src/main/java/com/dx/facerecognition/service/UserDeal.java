@@ -16,9 +16,13 @@ import com.dx.facerecognition.util.ExcutionResultUtil;
  **/
 public interface UserDeal {
 
-    public ExcutionResultUtil userRegister(User user);
+    public ExcutionResultUtil userRegister(User user,String img);
 
     public ExcutionResultUtil checkUserexits(String username);
 
     public User getUserInfo(String username);
+
+    public ExcutionResultUtil userRecognit(String img,int userid);
+
+    public ExcutionResultUtil userUpdate(User user,String img);
 }

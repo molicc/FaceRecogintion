@@ -39,7 +39,7 @@ function CatchCode() {
                         $("#ansdiv").show();
                         $("#question").val(data.msg);
                         alert("此次登录有风险，请做安全校验!");
-                    } else {
+                    }else {
                         alert(data.msg);
                     }
                 }

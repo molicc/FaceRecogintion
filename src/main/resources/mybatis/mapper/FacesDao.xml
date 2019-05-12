@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dx.facerecognition.dao.FacesDao">
+
+    <select id="getFacesByUserId" resultType="com.dx.facerecognition.entity.Faces">
+        select id,path,userid from faces where userid=#{userid}
+    </select>
+
+    <insert id="insertNewFace" parameterType="com.dx.facerecognition.entity.Faces" keyProperty="id" keyColumn="id"
+            useGeneratedKeys="true">
+        insert into faces(id,path,userid)
+        value (#{id},#{path},#{userid})
+    </insert>
+
+    <delete id="deleteFaceByUserId">
+      delete from faces
+      where id =(select id from
+      (select id from faces where userid=#{userid} order by createtime limit 1) temp )
+    </delete>
+
+    <select id="getOldestFacePath" resultType="string">
+        select path from faces where userid=#{userid} order by createtime limit 1
+    </select>
+
+</mapper>

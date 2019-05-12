@@ -19,6 +19,6 @@ public interface Recognit {
      * @param imagePath
      * @return
      */
-    public ExcutionResultUtil compare(String img, String imagePath);
+    public ExcutionResultUtil compare(String tempPath, String imagePath);
 
 }

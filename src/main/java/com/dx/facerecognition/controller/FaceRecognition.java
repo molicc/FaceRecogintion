@@ -4,10 +4,8 @@ package com.dx.facerecognition.controller;/**
  * @author Administrator
  */
 
-import com.dx.facerecognition.dao.UserDao;
 import com.dx.facerecognition.entity.User;
 import com.dx.facerecognition.service.Pretreat;
-import com.dx.facerecognition.service.Recognit;
 import com.dx.facerecognition.service.UserDeal;
 import com.dx.facerecognition.util.ContextPropertiesUtil;
 import com.dx.facerecognition.util.ExcutionResultUtil;
@@ -32,8 +30,6 @@ import java.util.Map;
 public class FaceRecognition {
     @Autowired
     private Pretreat pretreat;
-    @Autowired
-    private Recognit recognit;
     @Autowired
     private UserDeal userDeal;
     @Autowired
@@ -69,7 +65,18 @@ public class FaceRecognition {
             } else {
                 //解除风险控制
                 request.getSession().setAttribute("loginFailTimes", 0);
-                //todo 解除风险控制后要求重新录入人脸
+                ExcutionResultUtil userUpdate = userDeal.userUpdate(user, img);
+                if (userUpdate.isSuccess()) {
+                    //答案不匹配
+                    modelMap.put("success", true);
+                    modelMap.put("msg", "更新人脸成功!");
+                    return modelMap;
+                } else {
+                    //答案不匹配
+                    modelMap.put("success", false);
+                    modelMap.put("msg", userUpdate.getMsg());
+                    return modelMap;
+                }
             }
         }
 
@@ -77,7 +84,8 @@ public class FaceRecognition {
         //用户存在时获取风险信息
         Integer loginFailTimes = (Integer) request.getSession().getAttribute("loginFailTimes");
         if (loginFailTimes == null) {
-            request.getSession().setAttribute("loginFailTimes", 0);
+            loginFailTimes = 0;
+            request.getSession().setAttribute("loginFailTimes", loginFailTimes);
         } else if (loginFailTimes >= 3) {
             modelMap.put("success", false);
             modelMap.put("risklogin", true);
@@ -86,8 +94,8 @@ public class FaceRecognition {
         }
 
         //进行人脸校验
-        ExcutionResultUtil compare = recognit.compare(img, user.getImagePath());
-        if (compare.isSuccess()) {
+        ExcutionResultUtil userRecognit = userDeal.userRecognit(img, user.getId());
+        if (userRecognit.isSuccess()) {
             request.getSession().setAttribute("loginFailTimes", 0);
             modelMap.put("success", true);
             modelMap.put("msg", "登录成功!");
@@ -96,7 +104,7 @@ public class FaceRecognition {
             //校验失败则增加一次风险记录
             request.getSession().setAttribute("loginFailTimes", ++loginFailTimes);
             modelMap.put("success", false);
-            modelMap.put("msg", compare.getMsg());
+            modelMap.put("msg", userRecognit.getMsg());
             return modelMap;
         }
 
@@ -134,16 +142,10 @@ public class FaceRecognition {
             modelMap.put("msg", checkUserexits.getMsg());
             return modelMap;
         }
-        //对图片进行预处理
-        ExcutionResultUtil pretreatImg = pretreat.pretreatImg(img, username);
-        if (!pretreatImg.isSuccess()) {
-            modelMap.put("success", false);
-            modelMap.put("msg", pretreatImg.getMsg());
-            return modelMap;
-        }
+
         //将用户信息进行持久化
-        User user = new User(username, pretreatImg.getMsg(), question, answer);
-        ExcutionResultUtil userRegister = userDeal.userRegister(user);
+        User user = new User(username, 1, question, answer);
+        ExcutionResultUtil userRegister = userDeal.userRegister(user, img);
 
         if (userRegister.isSuccess()) {
             modelMap.put("success", true);

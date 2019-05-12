@@ -7,17 +7,17 @@
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="question" property="question" jdbcType="VARCHAR"/>
         <result column="answer" property="answer" jdbcType="VARCHAR"/>
-        <result column="imagepath" property="imagePath" jdbcType="VARCHAR"/>
+        <result column="imagesize" property="imageSize" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insertNewUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
             parameterType="com.dx.facerecognition.entity.User">
-        insert into user(username,imagepath,question,answer)
-        value (#{username},#{imagePath},#{question},#{answer})
+        insert into user(username,imagesize,question,answer)
+        value (#{username},#{imageSize},#{question},#{answer})
     </insert>
 
     <select id="getUserByName" parameterType="string" resultType="com.dx.facerecognition.entity.User">
-        select id,username,imagepath,question,answer from user
+        select id,username,imagesize,question,answer from user
         where username = #{username}
     </select>
 
@@ -25,7 +25,7 @@
         update user
         <set>
             <if test="username!=null">username =#{username},</if>
-            <if test="imagePath!=null">imagepath =#{imagePath},</if>
+            <if test="imageSize!=null">imagesize =#{imageSize},</if>
             <if test="question!=null">question =#{question},</if>
             <if test="answer!=null">password =#{answer}</if>
         </set>
