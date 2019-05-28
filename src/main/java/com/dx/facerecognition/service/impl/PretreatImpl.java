@@ -66,11 +66,11 @@ public class PretreatImpl implements Pretreat {
         //创建分类器  haarcascade_frontalface_alt.xml haarcascade_frontalface_alt2.xml haarcascade_frontalface_alt_tree
         // .xml haarcascade_frontalface_default.xml lbpcascade_frontalface.xml
         CascadeClassifier faceClassifier = new CascadeClassifier(System.getProperty("user.dir") +
-                "\\src\\main\\resources\\classifiler\\haarcascade_frontalface_alt.xml");
+                "\\src\\main\\resources\\classifiler\\lbpcascade_frontalface.xml");
         CascadeClassifier eyeClassifier = new CascadeClassifier(System.getProperty("user.dir") +
                 "\\src\\main\\resources\\classifiler\\haarcascade_eye_tree_eyeglasses.xml");
         //从照片中检测人脸区域
-        faceClassifier.detectMultiScale(image, faces, 1.1, 2, IMREAD_GRAYSCALE, new Size(30, 30), new Size(0,
+        faceClassifier.detectMultiScale(image, faces, 1.1, 1, IMREAD_GRAYSCALE, new Size(30, 30), new Size(0,
                 0));
 
 
@@ -131,8 +131,12 @@ public class PretreatImpl implements Pretreat {
             //规格化
             resize(face, mat, size);
             //保存到指定路径
-            imwrite(facePath, mat);
-            return new ExcutionResultUtil(true, facePath);
+            boolean imwrite = imwrite(facePath, mat);
+            if (imwrite){
+                return new ExcutionResultUtil(true, facePath);
+            }else {
+                return new ExcutionResultUtil(false,"保存截取图片失败");
+            }
         } catch (Exception e) {
             return new ExcutionResultUtil(false, "截取人脸失败:" + e.getMessage());
         } finally {
@@ -177,6 +181,7 @@ public class PretreatImpl implements Pretreat {
 
     @Override
     public ExcutionResultUtil pretreatImg(String img, String username) {
+        username= String.valueOf(username.hashCode());
         //保存图片
         ExcutionResultUtil saveImg = saveImg(img);
         if (saveImg.isSuccess()) {

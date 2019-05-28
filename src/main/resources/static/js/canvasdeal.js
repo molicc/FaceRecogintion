@@ -26,7 +26,6 @@ function success(stream){
     }catch (e) {
         //谷歌浏览器更新后无法使用摄像头Failed to execute 'createObjectURL' on 'URL'
         // https://blog.csdn.net/m0_37863265/article/details/84835764
-        console.log(e);
         video.srcObject=stream;
     }
     video.play();//播放视频

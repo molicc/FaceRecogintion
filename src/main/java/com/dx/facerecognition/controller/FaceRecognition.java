@@ -63,23 +63,22 @@ public class FaceRecognition {
                 modelMap.put("msg", "答案错误!");
                 return modelMap;
             } else {
-                //解除风险控制
+                //解除风险控制并调用更新模块
                 request.getSession().setAttribute("loginFailTimes", 0);
                 ExcutionResultUtil userUpdate = userDeal.userUpdate(user, img);
                 if (userUpdate.isSuccess()) {
-                    //答案不匹配
+                    //更新成功
                     modelMap.put("success", true);
                     modelMap.put("msg", "更新人脸成功!");
                     return modelMap;
                 } else {
-                    //答案不匹配
+                    //更新失败
                     modelMap.put("success", false);
                     modelMap.put("msg", userUpdate.getMsg());
                     return modelMap;
                 }
             }
         }
-
 
         //用户存在时获取风险信息
         Integer loginFailTimes = (Integer) request.getSession().getAttribute("loginFailTimes");
@@ -92,6 +91,7 @@ public class FaceRecognition {
             modelMap.put("msg", user.getQuestion());
             return modelMap;
         }
+
 
         //进行人脸校验
         ExcutionResultUtil userRecognit = userDeal.userRecognit(img, user.getId());

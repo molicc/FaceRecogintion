@@ -40,6 +40,7 @@ public class UserDealImpl implements UserDeal {
     @Override
     @Transactional
     public ExcutionResultUtil userRegister(User user, String img) {
+
         //对图片进行预处理
         ExcutionResultUtil pretreatImg = pretreat.pretreatImg(img, user.getUsername());
         if (!pretreatImg.isSuccess()) {

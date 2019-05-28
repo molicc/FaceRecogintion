@@ -1,4 +1,4 @@
-package com.dx.FaceRecogintion;
+package com.dx.facerecognition;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
