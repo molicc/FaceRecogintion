@@ -28,16 +28,22 @@
         </div>
 
 
-        <div class="input-group col-md-12 text-center">
-            <span class="input-group-addon">安全问题:</span>
-            <input type="text" class="form-control" placeholder="请输入安全问题" aria-describedby="basic-addon2" id="question">
-        </div>
-        <br/>
-        <div class="input-group col-md-12 text-center">
-            <span class="input-group-addon">问题答案:</span>
-            <input type="text" class="form-control" placeholder="请输入问题答案" aria-describedby="basic-addon2" id="answer">
-        </div>
 
+        <form class="form-inline ">
+            <div class="form-group">
+                <label for="email">安全邮箱：</label>
+                <input type="email" class="form-control" id="email" placeholder="请输入安全邮箱">
+            </div>
+            <button type="button" class="btn btn-default" id="sendemail" onclick="sendEmail()">发送验证码</button>
+        </form>
+
+        <br/>
+        <form class="form-inline ">
+            <div class="form-group">
+                <label for="verification">验证码  ：</label>
+                <input type="text" class="form-control" id="verification" placeholder="请输入验证码">
+            </div>
+        </form>
         <div class="col-md-12 text-center">
             <button type="button" class="btn btn-primary btn-lg" style="margin: 20px" id="login"
                     onclick="CatchCode()">注册

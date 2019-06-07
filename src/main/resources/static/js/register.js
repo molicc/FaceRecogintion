@@ -13,20 +13,20 @@ function CatchCode() {
     var imgData1 = imgData.substring(22);
 
     var username = $("#username").val();
-    var question = $("#question").val();
-    var answer = $("#answer").val();
+    var email = $("#email").val();
+    var verification = $("#verification").val();
 
     if (username.replace("\s+g", '') == '') {
         alert("请输入用户名！");
-    } else if (question.replace("\s+g", '') == '') {
-        alert("请输入安全问题!");
-    } else if (answer.replace("\s+g", '') == '') {
-        alert("请输入问题答案!");
+    } else if (email.replace("\s+g", '') == '') {
+        alert("请输入安全邮箱!");
+    } else if (verification.replace("\s+g", '') == '') {
+        alert("请输入验证码!");
     } else {
         $.ajax({
             type: "post",
             url: "/registerReq",
-            data: {"img": imgData1, "username": username, "question": question, "answer": answer},
+            data: {"img": imgData1, "username": username, "email": email, "verification": verification},
             success: function (data) {
                 if (data.success) {
                     alert(data.msg);
@@ -40,4 +40,24 @@ function CatchCode() {
         });
     }
 
+}
+
+//发送邮件
+function sendEmail() {
+    var email = $("#email").val();
+
+    if (email.replace("\s+g", '') == '') {
+        alert("请输入安全邮箱!");
+    } else {
+        $.ajax({
+            type: "post",
+            url: "/sendEmailReq",
+            data: {"email": email},
+            success: function (data) {
+                alert(data.msg);
+            }, error: function (data) {
+                alert("发送失败，请稍后重试！");
+            }
+        });
+    }
 }

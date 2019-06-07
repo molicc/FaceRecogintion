@@ -76,7 +76,7 @@ public class PretreatImpl implements Pretreat {
 
         if (faces.size() <= 0) {
             return new ExcutionResultUtil(false, "没有检测到人脸，请重新拍摄");
-        } else if (faces.size() > 1) {
+        } else if (faces.size() >0) {
             //创建临时人脸存储容器
             RectVector facestemp = new RectVector();
             //当检测出多个人脸时，遍历检测出来的人脸

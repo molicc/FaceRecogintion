@@ -5,6 +5,7 @@ package com.dx.facerecognition.controller;/**
  */
 
 import com.dx.facerecognition.entity.User;
+import com.dx.facerecognition.service.EmailDeal;
 import com.dx.facerecognition.service.Pretreat;
 import com.dx.facerecognition.service.UserDeal;
 import com.dx.facerecognition.util.ContextPropertiesUtil;
@@ -34,6 +35,8 @@ public class FaceRecognition {
     private UserDeal userDeal;
     @Autowired
     ContextPropertiesUtil contextPropertiesUtil;
+    @Autowired
+    EmailDeal emailDeal;
 
     @PostMapping("/loginReq")
     @ResponseBody
@@ -56,11 +59,11 @@ public class FaceRecognition {
         }
         //风险登录
         if (risklogin == true) {
-            String answer = request.getParameter("answer").replaceAll("\\s*", "");
-            if (!user.getAnswer().equals(answer)) {
-                //答案不匹配
+            String verification = request.getParameter("verification").replaceAll("\\s*", "");
+            if (!request.getSession().getAttribute(user.getEmail()).equals(verification)) {
+                //验证码不匹配
                 modelMap.put("success", false);
-                modelMap.put("msg", "答案错误!");
+                modelMap.put("msg", "验证码错误!");
                 return modelMap;
             } else {
                 //解除风险控制并调用更新模块
@@ -88,7 +91,8 @@ public class FaceRecognition {
         } else if (loginFailTimes >= 3) {
             modelMap.put("success", false);
             modelMap.put("risklogin", true);
-            modelMap.put("msg", user.getQuestion());
+            modelMap.put("msg", user.getEmail());
+            emailDeal.sendMail(user.getEmail());
             return modelMap;
         }
 
@@ -116,22 +120,30 @@ public class FaceRecognition {
     public Map<String, Object> register(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HashMap<String, Object> modelMap = new HashMap<>();
         String username = request.getParameter("username").replaceAll("\\s*", "");
-        String question = request.getParameter("question").replaceAll("\\s*", "");
-        String answer = request.getParameter("answer").replaceAll("\\s*", "");
+        String email = request.getParameter("email").replaceAll("\\s*", "");
+        String verification = request.getParameter("verification").replaceAll("\\s*", "");
         String img = request.getParameter("img");
         if (username == null || "".equals(username)) {
             modelMap.put("success", false);
             modelMap.put("msg", "请输入用户名!");
             return modelMap;
         }
-        if (question == null || "".equals(question)) {
+        if (email == null || "".equals(email)) {
             modelMap.put("success", false);
-            modelMap.put("msg", "请输入安全问题!");
+            modelMap.put("msg", "请输入安全邮箱!");
             return modelMap;
         }
-        if (answer == null || "".equals(answer)) {
+        if (verification == null || "".equals(verification)) {
             modelMap.put("success", false);
-            modelMap.put("msg", "请输入问题答案!");
+            modelMap.put("msg", "请输入验证码!");
+            return modelMap;
+        }
+
+        //检测验证码是否正确
+        String checkVer = (String) request.getSession().getAttribute(email);
+        if (!verification.equals(checkVer)){
+            modelMap.put("success", false);
+            modelMap.put("msg","验证码错误，请核对！");
             return modelMap;
         }
 
@@ -144,7 +156,7 @@ public class FaceRecognition {
         }
 
         //将用户信息进行持久化
-        User user = new User(username, 1, question, answer);
+        User user = new User(username, 1, email);
         ExcutionResultUtil userRegister = userDeal.userRegister(user, img);
 
         if (userRegister.isSuccess()) {
@@ -158,6 +170,32 @@ public class FaceRecognition {
         }
 
 
+    }
+
+
+    @PostMapping("/sendEmailReq")
+    @ResponseBody
+    public Map<String, Object> sendEmail(HttpServletRequest request, HttpServletResponse response) {
+        HashMap<String, Object> modelMap = new HashMap<>();
+        String email = request.getParameter("email").replaceAll("\\s*", "");
+        if (email == null || "".equals(email)) {
+            modelMap.put("success", false);
+            modelMap.put("msg", "请输入安全邮箱!");
+            return modelMap;
+        }
+
+        String verification = emailDeal.sendMail(email);
+
+        if (verification == null) {
+            modelMap.put("success", false);
+            modelMap.put("msg", "发送失败，请稍后再试");
+            return modelMap;
+        }
+
+
+        modelMap.put("success", true);
+        modelMap.put("msg", "发送成功，请查看邮件");
+        return modelMap;
     }
 
 

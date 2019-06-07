@@ -1,7 +1,6 @@
 //拍照函数
 
-$("#quesdiv").hide();
-$("#ansdiv").hide();
+$("#verificaitondiv").hide();
 var risklogin = false;
 
 function CatchCode() {
@@ -17,7 +16,7 @@ function CatchCode() {
     var imgData1 = imgData.substring(22);
 
     var username = $("#username").val();
-    var answer = $("#answer").val();
+    var verification = $("#verification").val();
     if (username.replace("\s+g", "") == '') {
         alert("请输入用户名!")
     } else if (risklogin == false) {
@@ -27,18 +26,15 @@ function CatchCode() {
             data: {"img": imgData1, "risklogin": risklogin, "username": username},
             success: function (data) {
                 if (data.success) {
-                    $("#quesdiv").hide();
-                    $("#ansdiv").hide();
-                    $("#answer").val("");
+                    $("#verificaitondiv").hide();
+                    $("#verification").val("");
                     risklogin = false;
                     alert(data.msg);
                 } else {
                     if (data.risklogin) {
                         risklogin = true;
-                        $("#quesdiv").show();
-                        $("#ansdiv").show();
-                        $("#question").val(data.msg);
-                        alert("此次登录有风险，请做安全校验!");
+                        $("#verificaitondiv").show();
+                        alert("此次登录有风险，请输入验证码!");
                     }else {
                         alert(data.msg);
                     }
@@ -48,26 +44,23 @@ function CatchCode() {
             }
         });
     } else if (risklogin == true) {
-        if (answer.replace("\s+g", "") == '') {
-            alert("请输入问题答案!")
+        if (verification.replace("\s+g", "") == '') {
+            alert("请输入验证码!")
         } else {
             $.ajax({
                 type: "post",
                 url: "/loginReq",
-                data: {"img": imgData1, "risklogin": risklogin, "username": username, "answer": answer},
+                data: {"img": imgData1, "risklogin": risklogin, "username": username, "verification": verification},
                 success: function (data) {
                     if (data.success) {
-                        $("#quesdiv").hide();
-                        $("#ansdiv").hide();
-                        $("#answer").val("");
+                        $("#verificaitondiv").hide();
+                        $("#verification").val("");
                         risklogin = false;
                         alert(data.msg);
                     } else {
                         if (data.risklogin) {
                             risklogin = true;
-                            $("#quesdiv").show();
-                            $("#ansdiv").show();
-                            $("#question").val(data.msg);
+                            $("#verificaitondiv").show();
                             alert("此次登录有风险，请做安全校验!");
                         } else {
                             alert(data.msg);

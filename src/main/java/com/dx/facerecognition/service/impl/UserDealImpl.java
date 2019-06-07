@@ -143,7 +143,7 @@ public class UserDealImpl implements UserDeal {
 
             if (user.getImageSize() < 3) {
                 //当未到达指定阈值，则新加一个
-                userDao.updateUserInfo(new User(user.getUsername(), user.getImageSize() + 1, null, null));
+                userDao.updateUserInfo(new User(user.getUsername(), user.getImageSize() + 1, null));
             } else {
 
                 //当到达则删除最旧的

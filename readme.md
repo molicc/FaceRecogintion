@@ -1,0 +1,5 @@
+# 基于人脸识别的登录验证系统
+* 本系统基于spring boot 进行后端服务的搭建，前端采用bootstrap进行快速搭建响应式布局，数据库采用mysql进行管理
+* 本系统部分关键参数抽离在application.properties中，properties.imagePath指保存临时图片路径，properties.facesPath指保存人脸路径,properties
+.matching指人脸匹配相似度阈值
+* 相应数据库信息配置以及mybatis配置请在application.properties修改

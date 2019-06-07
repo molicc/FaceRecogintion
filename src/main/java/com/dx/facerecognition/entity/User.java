@@ -14,15 +14,13 @@ public class User {
     private int id;
     private int imageSize;
     private String username;
-    private String question;
-    private String answer;
+    private String email;
 
 
-    public User(String username, int imageSize, String question, String answer) {
+    public User(String username, int imageSize, String question) {
         this.imageSize = imageSize;
         this.username = username;
-        this.question = question;
-        this.answer = answer;
+        this.email = question;
     }
 
     public User() {
@@ -53,21 +51,14 @@ public class User {
         this.username = username;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getEmail() {
+        return email;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 
     @Override
     public String toString() {
@@ -75,8 +66,7 @@ public class User {
                 "id=" + id +
                 ", imageSize='" + imageSize + '\'' +
                 ", username='" + username + '\'' +
-                ", question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
